@@ -1,54 +1,56 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
-interface HeroSectionProps {
-  backgroundImage?: string;
-  headline?: string;
-  subheadline?: string;
-  ctaText?: string;
-  onCtaClick?: () => void;
-}
+const quotes = [
+  "Parce qu'il faut vivre, vieillir est une chance et mourir une nécessité",
+  "Votre performance business décollera en formant vos équipes à la culture et la pédagogie",
+  "Mieux écouter pour conseiller de manière éclairée puis vendre en sécurité éthique",
+  "À travers des conférences, des ateliers et des formations, je vous invite à mieux comprendre ces passages",
+  "Ecouter l'intime nous dévoile ou nous confronte à nos peurs et à nos croyances limitantes"
+];
 
-const HeroSection = ({
-  backgroundImage = "https://images.unsplash.com/photo-1486984008894-0fd52d3c106c?q=80&w=3270&auto=format&fit=crop",
-  headline = "Accompagnement et expertise en fin de vie",
-  subheadline = "Un accompagnement personnalisé et professionnel pour vous guider dans les moments les plus importants",
-  ctaText = "Découvrir nos services",
-  onCtaClick = () => console.log("CTA clicked"),
-}: HeroSectionProps) => {
+const HeroSection = () => {
+  const [currentQuote, setCurrentQuote] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentQuote((prev) => (prev + 1) % quotes.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="relative w-full h-[800px] bg-gray-100">
-      <div
-        className="absolute inset-0 w-full h-full"
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
-      </div>
-
-      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-start">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 max-w-3xl">
-          {headline}
+    <section className="relative overflow-hidden">
+      <div className="max-w-6xl mx-auto text-center space-y-12">
+        {/* Name */}
+        <h1 className="text-7xl md:text-8xl font-light tracking-tight text-gray-900">
+          anne géron
         </h1>
 
-        <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl">
-          {subheadline}
-        </p>
+        {/* Animated quote */}
+        <div className="h-32 flex items-center justify-center px-4">
+          <p 
+            className="text-2xl md:text-3xl font-light text-gray-800 max-w-3xl mx-auto
+            transition-opacity duration-500 ease-in-out"
+          >
+            {quotes[currentQuote]}
+          </p>
+        </div>
 
-        <Button
-          size="lg"
-          onClick={onCtaClick}
-          className="bg-white text-gray-900 hover:bg-gray-100 transition-colors"
-        >
-          {ctaText}
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
+        {/* Quote indicators */}
+        <div className="flex justify-center gap-2">
+          {quotes.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentQuote(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentQuote ? 'bg-gray-800 w-8' : 'bg-gray-300'
+              }`}
+              aria-label={`Quote ${index + 1}`}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
