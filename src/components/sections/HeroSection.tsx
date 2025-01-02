@@ -10,13 +10,23 @@ const quotes = [
 
 const HeroSection = () => {
   const [currentQuote, setCurrentQuote] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
 
+  // Change the quote every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentQuote((prev) => (prev + 1) % quotes.length);
     }, 5000);
-    return () => clearInterval(timer);
+    setIntervalId(timer);
+
+    return () => clearInterval(timer); // Clean up the interval on component unmount
   }, []);
+
+  // Handle manual selection of a quote
+  const handleQuoteChange = (index) => {
+    clearInterval(intervalId); // Clear the interval when a user selects a quote manually
+    setCurrentQuote(index);
+  };
 
   return (
     <section className="relative overflow-hidden">
@@ -29,8 +39,9 @@ const HeroSection = () => {
         {/* Animated quote */}
         <div className="h-32 flex items-center justify-center px-4">
           <p 
-            className="text-2xl md:text-3xl font-light text-gray-800 max-w-3xl mx-auto
+            className="text-2xl md:text-3xl font-light text-gray-800 max-w-3xl mx-auto 
             transition-opacity duration-500 ease-in-out"
+            aria-live="polite"
           >
             {quotes[currentQuote]}
           </p>
@@ -41,13 +52,13 @@ const HeroSection = () => {
           {quotes.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentQuote(index)}
+              onClick={() => handleQuoteChange(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 index === currentQuote ? 'bg-gray-800 w-8' : 'bg-gray-300'
               }`}
               aria-label={`Quote ${index + 1}`}
             />
-          )}
+          ))}
         </div>
       </div>
     </section>
