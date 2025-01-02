@@ -12,21 +12,23 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <div className="w-full fixed top-0 z-50 bg-white border-b border-gray-100">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center py-4">
-          <Link to="/" className="mb-4">
-            <img src="/logo.svg" alt="Anne Géron" className="h-12" />
+    <div className="w-full fixed top-0 z-50 bg-white border-b border-gray-200">
+      <div className="container mx-auto px-8">
+        <div className="flex items-center justify-between h-20">
+          <Link to="/" className="text-2xl font-bold text-gray-900">
+            Anne Géron
           </Link>
 
-          <nav className="flex justify-center gap-8">
+          <nav className="flex items-center gap-12">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  "nav-link",
-                  location.pathname === item.href && "active",
+                  "text-lg font-medium hover:text-gray-900",
+                  location.pathname === item.href
+                    ? "text-gray-900"
+                    : "text-gray-600",
                 )}
               >
                 {item.name}
